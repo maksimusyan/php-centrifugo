@@ -68,6 +68,10 @@ abstract class TransportFactory
                     $redisClient->setDb($params['db']);
                 }
 
+                if (isset($params['auth']) && !empty($params['auth'])) {
+                    $redisClient->setAuth($params['auth']);
+                }
+
                 if (isset($params['shardsNumber'])) {
                     $redisClient->setShardsNumber($params['shardsNumber']);
                 }

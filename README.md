@@ -8,6 +8,35 @@ PHP client for [Centrifugo](https://github.com/centrifugal/centrifugo) real-time
 * Support transport chain (Redis + HTTP) as failover. If Redis down (or method not supported by Redis transport) client try send message via HTTP transport
 * Support batch requests
 
+### Attention!
+> The library is based on the php extension [PhpRedis](https://github.com/phpredis/phpredis)
+
+
+## Install
+
+> composer require maksimusyan/php-centrifugo
+```php
+{
+  "require": {
+    "maksimusyan/php-centrifugo": "1.0.1"
+  }
+}
+```
+or the developer version directly from github:
+```php
+{
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "git://github.com/maksimusyan/php-centrifugo.git"
+    }
+  ],
+  "require": {
+    "maksimusyan/php-centrifugo": "dev-master"
+  }
+}
+```
+
 ## Quick Examples
 
 ### Create Centrifugo client
@@ -18,8 +47,9 @@ PHP client for [Centrifugo](https://github.com/centrifugal/centrifugo) real-time
 use Centrifugo\Centrifugo;
 
 $endpoint = 'http://example.com/api/';
-$secret = 'secret api key';
+$secret = 'SECRET_API_KEY';
 
+// From Redis transport
 $centrifugo = new Centrifugo($endpoint, $secret, [
     'redis' => [
         'host'         => 'localhost',
@@ -28,12 +58,18 @@ $centrifugo = new Centrifugo($endpoint, $secret, [
         'db'           => 0,
         'timeout'      => 0.0,
         'shardsNumber' => 0,
-    ],
+        'auth' => 'YOUR_REDIS_AUTH_TOKEN',
+    ]
+]);
+
+// OR from CURL transport
+$centrifugo = new Centrifugo($endpoint, $secret, [
     'http' => [
         // Curl options
         CURLOPT_TIMEOUT => 5,
     ],
 ]);
+
 ```
 
 ### Send request to Centrifugo
