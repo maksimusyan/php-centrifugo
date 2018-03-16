@@ -18,7 +18,7 @@ PHP client for [Centrifugo](https://github.com/centrifugal/centrifugo) real-time
 ```php
 {
   "require": {
-    "maksimusyan/php-centrifugo": "1.0.4"
+    "maksimusyan/php-centrifugo": "1.0.5"
   }
 }
 ```
