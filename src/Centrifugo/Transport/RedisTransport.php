@@ -42,6 +42,10 @@ class RedisTransport extends RequestHandler
      */
     protected $shardsNumber = 0;
     /**
+     * @var string
+     */
+    protected $auth = '';
+    /**
      * @var array
      */
     protected $supportedMethods = ['publish', 'broadcast', 'unsubscribe', 'disconnect'];
@@ -77,6 +81,14 @@ class RedisTransport extends RequestHandler
     }
 
     /**
+     * @param string $auth
+     */
+    public function setAuth($auth)
+    {
+        $this->auth = (string) $auth;
+    }
+
+    /**
      * Open Redis connection
      *
      * @throws CentrifugoTransportException
@@ -90,9 +102,14 @@ class RedisTransport extends RequestHandler
             throw new CentrifugoTransportException('Failed to open redis DB connection.');
         }
 
+        if (!empty($this->auth) && !$this->connection->auth($this->auth)) {
+            throw new CentrifugoTransportException('Redis authorization failed');
+        }
+
         if ($this->db && !$this->connection->select($this->db)) {
             throw new CentrifugoTransportException('Failed to select redis DB.');
         }
+
     }
 
     /**
